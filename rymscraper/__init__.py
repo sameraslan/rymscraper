@@ -110,7 +110,7 @@ class RymNetwork:
         """Returns a list of dicts containing chart infos.
 
         Parameters:
-            url: An url for a chart. Can be created with the RymUrl helper.
+            url: A url for a chart. Can be created with the RymUrl helper.
             See the get_chart.py script in the examples folder for an example.
             max_page: The max number of pages to extract from the chart.
 
@@ -119,56 +119,35 @@ class RymNetwork:
 
         """
         logger.info("Extracting chart informations for %s.", url)
-
         list_rows = []
-        while True:
-            try:
-                self.browser.get_url(url)
-                logger.debug("Extracting chart rows for url %s", url)
-                soup = self.browser.get_soup()
+        for i in range(25):
+            self.browser.get_url(url)
+            logger.debug("Extracting chart rows for url %s", url)
+            soup = self.browser.get_soup()
 
-                # table containing albums
-                if soup.find(
+            # table containing albums
+            if soup.find(
+                "div", {"class": "chart_results chart_results_ charts_page"}
+            ):
+                logger.debug("Table class mbgen found")
+                table = soup.find(
                     "div", {"class": "chart_results chart_results_ charts_page"}
-                ):
-                    logger.debug("Table class mbgen found")
-                    table = soup.find(
-                        "div", {"class": "chart_results chart_results_ charts_page"}
-                    )
-                    rows = table.find_all(
-                        "div", {"class": "topcharts_itembox chart_item_release"}
-                    )
-                    if len(rows) == 0:
-                        logger.debug("No rows extracted. Exiting")
-                        break
-                    for row in rows:
-                        # don't parse ads
-                        if not row.find("script"):
-                            dict_row = utils.get_chart_row_infos(row)
-                            list_rows.append(dict_row)
-                else:
-                    logger.warning("Table class mbgen not found")
+                )
+                rows = table.find_all(
+                    "div", {"class": "topcharts_itembox chart_item_release"}
+                )
+                if len(rows) == 0:
+                    logger.debug("No rows extracted. Exiting")
                     break
-
-                # link to the next page
-                if soup.find("a", {"class": "navlinknext"}):
-                    logger.debug("Next page found")
-                    if max_page and url.page == max_page:
-                        break
-                    url.page += 1
-                    soup.decompose()
-                    try:
-                        self.browser.get_url(url)
-                        soup = self.browser.get_soup()
-                    except Exception as e:
-                        logger.error(e)
-                        break
-                else:
-                    logger.debug("No next page found. Exiting.")
-                    break
-            except Exception as e:
-                logger.error("Error scraping page %s : %s", url, e)
+                for row in rows:
+                    # don't parse ads
+                    if not row.find("script"):
+                        dict_row = utils.get_chart_row_infos(row)
+                        list_rows.append(dict_row)
+            else:
+                logger.warning("Table class mbgen not found")
                 break
+            url.page += 1
 
         return list_rows
 
