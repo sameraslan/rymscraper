@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import List, Dict
 from rymscraper import RymBrowser, utils
 
@@ -120,7 +121,8 @@ class RymNetwork:
         """
         logger.info("Extracting chart informations for %s.", url)
         list_rows = []
-        for i in range(25):
+        for i in range(1, 3):
+            url.page = i
             self.browser.get_url(url)
             logger.debug("Extracting chart rows for url %s", url)
             soup = self.browser.get_soup()
@@ -147,7 +149,6 @@ class RymNetwork:
             else:
                 logger.warning("Table class mbgen not found")
                 break
-            url.page += 1
 
         return list_rows
 
