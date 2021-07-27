@@ -1,4 +1,5 @@
 import pandas as pd
 
 df = pd.read_csv("merged.csv")
-print(df)
+df = df.iloc[: , 1:]
+print(df.head())
