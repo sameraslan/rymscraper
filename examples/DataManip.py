@@ -11,6 +11,7 @@ df_merged = pd.concat(df_from_each_file, ignore_index=True)
 df_merged.to_csv( "merged.csv")'''
 
 df = pd.read_csv("merged.csv")
+#Removes left column of unnecessary rank
 df = df.iloc[: , 1:]
 
 #Since column name RYM Rating has a space replace space with underscore
