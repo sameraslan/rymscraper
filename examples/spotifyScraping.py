@@ -7,13 +7,8 @@ secret = '50826f24c12044448b906de50ac74742'
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-if len(sys.argv) > 1:
-    name = ' '.join(sys.argv[1:])
-else:
-    name = 'Fishmans'
+artist_uri = '5LhTec3c7dcqBvpLRWbMcf'
+track_uri = 'spotify:track:36apwMphkcaS63LY3JJMPh'
 
-results = spotify.search(q='artist:' + name, type='artist')
-items = results['artists']['items']
-if len(items) > 0:
-    artist = items[0]
-    print(artist['name'], artist['images'][0]['url'])
+results = spotify.audio_features(track_uri)
+print(results)
