@@ -17,6 +17,8 @@ df = df.iloc[: , 1:]
 #Since column name RYM Rating has a space replace space with underscore
 df.columns = [c.replace(' ', '_') for c in df.columns]
 pd.set_option("display.max_rows", None, "display.max_columns", None)
-dfAbove1K = (df[df.Ratings >= 1000])
-dfAbove1K.to_csv('Above1kRatings.csv')
-print(len(dfAbove1K))
+dfTest = (df[df.Ratings < 250])
+dfTest.to_csv('dfTest.csv')
+'''dfAbove1K = (df[df.Ratings >= 1000])
+dfAbove1K.to_csv('Above1kRatings.csv')'''
+print(len(dfTest))

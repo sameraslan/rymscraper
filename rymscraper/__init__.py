@@ -121,7 +121,7 @@ class RymNetwork:
         """
         logger.info("Extracting chart informations for %s.", url)
         list_rows = []
-        for i in range(52, 54):
+        for i in range(126, 141):
             url.page = i
             self.browser.get_url(url)
             logger.debug("Extracting chart rows for url %s", url)
